@@ -20,7 +20,9 @@ jobs:
           LEDE_FILE_NAME: ${{ secrets.LEDE_FILE_NAME }}
           LEDE_SCP_PASSWORD: ${{ secrets.LEDE_SCP_PASSWORD }}
       run: |
+        mkdir bin
         cd bin/
+        mkdir test
         zip -r -o -q -9 "$LEDE_FILE_NAME" . -i *
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
         chmod 775 scpUpload.sh
