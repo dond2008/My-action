@@ -54,13 +54,6 @@ jobs:
         #curl -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/XiaoMi/XiaoMi-AC2100/Lean-Package" -F "file=@mt7621-Package.zip" ${{ secrets.MAIN_UPLOAD_PROCESSOR }}
         #curl --socks5 ${{ secrets.PROXY_ADDR }} -U ${{ secrets.PROXY_USER }} -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/XiaoMi/XiaoMi-AC2100/Lean-Package" -F "file=@mt7621-Package.zip" ${{ secrets.CN_STATION_PROCESSOR }}
         
-    - name: Only Upload firmware (Without packages)
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: mt7621
-        path: lede/bin/targets/*/*
-        
     - name: Upload firmware to Download Station (Without packages)
       if: success()
       run: |
