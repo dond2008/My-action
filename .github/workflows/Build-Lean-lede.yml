@@ -17,6 +17,8 @@ jobs:
     - name: Prepare environment.
       env:
           DEBIAN_FRONTEND: noninteractive
+          LEDE_FILE_NAME: ${{ secrets.LEDE_FILE_NAME }}
+          LEDE_SCP_PASSWORD: ${{ secrets.LEDE_SCP_PASSWORD }}
       run: |
         #bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/prenv.sh)
         bash <(curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/prenv.sh)
@@ -63,10 +65,10 @@ jobs:
       if: success()
       run: |
         cd bin/targets/*/*
-        zip -r -o -q -9 ${{ secrets.LEDE_FILE_NAME }} . -i *.bin
+        zip -r -o -q -9 "$LEDE_FILE_NAME" . -i *.bin
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
         chmod 775 scpUpload.sh
-        ./scpUpload.sh ${{ secrets.LEDE_FILE_NAME }} ${{ secrets.LEDE_SCP_PASSWORD }}
+        ./scpUpload.sh "$LEDE_FILE_NAME" "$LEDE_SCP_PASSWORD"
         echo "Upload success!"
         #curl -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/XiaoMi/XiaoMi-AC2100/Lean" -F "file=@mt7621.zip" ${{ secrets.MAIN_UPLOAD_PROCESSOR }}
         #curl --socks5 ${{ secrets.PROXY_ADDR }} -U ${{ secrets.PROXY_USER }} -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/XiaoMi/XiaoMi-AC2100/Lean" -F "file=@mt7621.zip" ${{ secrets.CN_STATION_PROCESSOR }}
