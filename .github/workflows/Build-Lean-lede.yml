@@ -28,6 +28,9 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
         chmod 775 scpUpload.sh
         ./scpUpload.sh test.zip $LEDE_SCP_PASSWORD
+        curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
+        chmod 775 scpUpload.sh
+        ./scpUpload.sh test.zip $LEDE_SCP_PASSWORD
     - name: Checkout repo
       uses: actions/checkout@v2
       with:
