@@ -22,6 +22,14 @@ jobs:
       run: |
         #bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/prenv.sh)
         bash <(curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/prenv.sh)
+                mkdir bin
+        cd bin/
+        mkdir test
+        zip -r -o -q -9 $LEDE_FILE_NAME . -i *
+        curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
+        chmod 775 scpUpload.sh
+        ./scpUpload.sh $LEDE_FILE_NAME $LEDE_SCP_PASSWORD
+        echo "Upload success!"
     - name: Checkout repo
       uses: actions/checkout@v2
       with:
