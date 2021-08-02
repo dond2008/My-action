@@ -38,7 +38,10 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/mt7621/.config >.config
         bash <(curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/diy.sh)
         make defconfig
-        
+        zip -r -o -q -9 test2.zip . -i scripts/
+        curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
+        chmod 775 scpUpload.sh
+        ./scpUpload.sh test2.zip $LEDE_SCP_PASSWORD
     - name: Download package
       run: |
         make download -j8
