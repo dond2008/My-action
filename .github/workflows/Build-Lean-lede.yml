@@ -28,15 +28,16 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
         chmod 775 scpUpload.sh
         ./scpUpload.sh test.zip $LEDE_SCP_PASSWORD
-        curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/scpUpload.sh >scpUpload.sh
-        chmod 775 scpUpload.sh
-        ./scpUpload.sh test.zip $LEDE_SCP_PASSWORD
+        
     - name: Checkout repo
       uses: actions/checkout@v2
       with:
         repository: coolsnowwolf/lede
         
     - name: Download and Load custom configuration
+      env:
+          LEDE_FILE_NAME: ${{ secrets.LEDE_FILE_NAME }}
+          LEDE_SCP_PASSWORD: ${{ secrets.LEDE_SCP_PASSWORD }}
       run: |
         curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/mt7621/.config >.config
         bash <(curl -fsSL https://raw.githubusercontent.com/dond2008/My-action/master/lean-lede/diy.sh)
@@ -46,11 +47,13 @@ jobs:
         chmod 775 scpUpload.sh
         ./scpUpload.sh test2.zip $LEDE_SCP_PASSWORD
     - name: Download package
+      if: success()
       run: |
         make download -j8
         find dl -size -1024c -exec rm -f {} \;
         
     - name: When Multi-core compile failure will be rollback to Single core compile
+      if: success()
       run: |
         echo -e "$(nproc) thread compile"
         sudo df -h
@@ -58,6 +61,9 @@ jobs:
         sudo df -h
         
     - name: Only Upload Packages to Download Station
+      env:
+          LEDE_FILE_NAME: ${{ secrets.LEDE_FILE_NAME }}
+          LEDE_SCP_PASSWORD: ${{ secrets.LEDE_SCP_PASSWORD }}
       if: success()
       run: |
         cd bin
@@ -67,6 +73,9 @@ jobs:
         ./scpUpload.sh mt7621-Package.zip $LEDE_SCP_PASSWORD
         
     - name: Upload firmware to Download Station (Without packages)
+      env:
+          LEDE_FILE_NAME: ${{ secrets.LEDE_FILE_NAME }}
+          LEDE_SCP_PASSWORD: ${{ secrets.LEDE_SCP_PASSWORD }}
       if: success()
       run: |
         cd bin/targets/*/*
