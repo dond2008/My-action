@@ -7,7 +7,7 @@ on:
   #   paths:
   #     -  'lean-lede/x86_64/.config'
   schedule:
-        - cron: 0 23 * * *
+        - cron: 0 23 * * 1-5
 
 jobs:
   
